@@ -1,0 +1,7 @@
+mountpoints:
+  /:
+    url: https://content.da.live/kavingas/accs-storefront/
+    type: markup
+
+folders:
+  /products/: /products/default
