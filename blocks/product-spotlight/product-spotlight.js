@@ -10,7 +10,6 @@ import { getConfigValue } from '@dropins/tools/lib/aem/configs.js';
 
 // Dropin Components
 import { Button, Icon, provider as UI } from '@dropins/tools/components.js';
-import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
 
 // Cart Dropin
 import * as cartApi from '@dropins/storefront-cart/api.js';
@@ -35,7 +34,7 @@ import '../../scripts/initializers/wishlist.js';
 async function fetchProductData(sku) {
   const endpoint = getConfigValue('commerce-core-endpoint');
   const headers = getConfigValue('headers');
-  
+
   const query = `
     query getProduct($sku: String!) {
       products(skus: [$sku]) {
@@ -70,12 +69,12 @@ async function fetchProductData(sku) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...headers?.cs || {}
+        ...headers?.cs || {},
       },
       body: JSON.stringify({
         query,
-        variables: { sku }
-      })
+        variables: { sku },
+      }),
     });
 
     const data = await response.json();
@@ -131,17 +130,17 @@ function createProductInfo(product, labels, container) {
   // Product price
   const priceContainer = document.createElement('div');
   priceContainer.className = 'spotlight__price-container';
-  
+
   const price = document.createElement('span');
   price.className = 'spotlight__price';
   const priceData = product.price_range?.minimum_price;
   if (priceData) {
-    const currency = priceData.final_price.currency;
+    const { currency } = priceData.final_price;
     const finalPrice = priceData.final_price.value;
     const regularPrice = priceData.regular_price.value;
-    
+
     price.textContent = `${currency} ${finalPrice.toFixed(2)}`;
-    
+
     // Show discount if applicable
     if (finalPrice < regularPrice) {
       const originalPrice = document.createElement('span');
@@ -168,27 +167,27 @@ function createProductInfo(product, labels, container) {
   // Add to cart button
   const addToCartContainer = document.createElement('div');
   addToCartContainer.className = 'spotlight__add-to-cart';
-  
+
   UI.render(Button, {
     children: labels.Global?.AddProductToCart || 'Add to Cart',
     icon: Icon({ source: 'Cart' }),
-    onClick: (event) => {
+    onClick: () => {
       cartApi.addProductsToCart([
-        { sku: product.sku, quantity: 1 }
+        { sku: product.sku, quantity: 1 },
       ]);
-      
+
       // Show success feedback
       const successMessage = document.createElement('div');
       successMessage.className = 'spotlight__success-message';
       successMessage.textContent = 'Added to cart!';
       addToCartContainer.appendChild(successMessage);
-      
+
       setTimeout(() => {
         successMessage.remove();
       }, 3000);
     },
     variant: 'primary',
-    size: 'large'
+    size: 'large',
   })(addToCartContainer);
 
   actionsContainer.appendChild(addToCartContainer);
@@ -196,12 +195,12 @@ function createProductInfo(product, labels, container) {
   // View product button
   const viewProductContainer = document.createElement('div');
   viewProductContainer.className = 'spotlight__view-product';
-  
+
   UI.render(Button, {
     children: labels.Global?.ViewProduct || 'View Details',
     href: rootLink(`/products/${product.url_key}/${product.sku}`),
     variant: 'secondary',
-    size: 'large'
+    size: 'large',
   })(viewProductContainer);
 
   actionsContainer.appendChild(viewProductContainer);
@@ -209,14 +208,14 @@ function createProductInfo(product, labels, container) {
   // Wishlist toggle
   const wishlistContainer = document.createElement('div');
   wishlistContainer.className = 'spotlight__wishlist';
-  
+
   wishlistRender.render(WishlistToggle, {
     product: {
       sku: product.sku,
       name: product.name,
       price: product.price_range?.minimum_price?.final_price,
-      image: product.media_gallery?.[0]
-    }
+      image: product.media_gallery?.[0],
+    },
   })(wishlistContainer);
 
   actionsContainer.appendChild(wishlistContainer);
@@ -231,13 +230,13 @@ function createProductInfo(product, labels, container) {
 export default async function decorate(block) {
   // Get labels for internationalization
   const labels = await fetchPlaceholders();
-  
+
   // Read block configuration
   const config = readBlockConfig(block);
-  const { 
+  const {
     sku,
     title = 'Featured Product',
-    theme = 'default'
+    theme = 'default',
   } = config;
 
   // Validate required configuration
@@ -255,7 +254,7 @@ export default async function decorate(block) {
   try {
     // Fetch product data
     const product = await fetchProductData(sku);
-    
+
     if (!product) {
       block.innerHTML = '<p class="spotlight__error">Product not found</p>';
       return;
@@ -263,7 +262,7 @@ export default async function decorate(block) {
 
     // Clear loading state and create the spotlight structure
     block.innerHTML = '';
-    
+
     // Create main container
     const container = document.createElement('div');
     container.className = 'spotlight__container';
@@ -282,7 +281,7 @@ export default async function decorate(block) {
 
     // Create product image
     createProductImage(product, contentWrapper);
-    
+
     // Create product information
     createProductInfo(product, labels, contentWrapper);
 
@@ -293,9 +292,8 @@ export default async function decorate(block) {
     events.emit('product-spotlight/loaded', {
       sku: product.sku,
       name: product.name,
-      price: product.price_range?.minimum_price?.final_price?.value
+      price: product.price_range?.minimum_price?.final_price?.value,
     });
-
   } catch (error) {
     console.error('Error in product spotlight block:', error);
     block.innerHTML = '<p class="spotlight__error">Error loading product</p>';
