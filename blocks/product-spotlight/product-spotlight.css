@@ -158,12 +158,6 @@
   cursor: pointer;
 }
 
-.spotlight__add-to-cart .dropin-button:hover {
-  background: var(--color-brand-600);
-  transform: translateY(-1px);
-  box-shadow: var(--shape-shadow-1);
-}
-
 .spotlight__view-product .dropin-button {
   justify-content: center;
   background: transparent;
@@ -178,9 +172,35 @@
   text-decoration: none;
 }
 
+/* Wishlist Section */
+.spotlight__wishlist .dropin-button {
+  background: transparent;
+  border: none;
+  color: var(--color-neutral-600);
+  padding: var(--spacing-small);
+  border-radius: var(--shape-border-radius-2);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.spotlight__wishlist .dropin-button:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-brand-500);
+}
+
+.spotlight__wishlist .dropin-button.active {
+  color: var(--color-alert-500);
+}
+
 .spotlight__view-product .dropin-button:hover {
   background: var(--color-brand-500);
   color: var(--color-neutral-50);
+  transform: translateY(-1px);
+  box-shadow: var(--shape-shadow-1);
+}
+
+.spotlight__add-to-cart .dropin-button:hover {
+  background: var(--color-brand-600);
   transform: translateY(-1px);
   box-shadow: var(--shape-shadow-1);
 }
@@ -200,45 +220,26 @@
   margin-top: var(--spacing-xsmall);
   white-space: nowrap;
   z-index: 10;
-  animation: slideInUp 0.3s ease;
+  animation: slide-in-up 0.3s ease;
 }
 
-@keyframes slideInUp {
+@keyframes slide-in-up {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
 }
 
-/* Wishlist Section */
 .spotlight__wishlist {
   display: flex;
   justify-content: center;
   padding-top: var(--spacing-medium);
   border-top: var(--shape-border-width-1) solid var(--color-neutral-300);
-}
-
-.spotlight__wishlist .dropin-button {
-  background: transparent;
-  border: none;
-  color: var(--color-neutral-600);
-  padding: var(--spacing-small);
-  border-radius: var(--shape-border-radius-2);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.spotlight__wishlist .dropin-button:hover {
-  background: var(--color-neutral-100);
-  color: var(--color-brand-500);
-}
-
-.spotlight__wishlist .dropin-button.active {
-  color: var(--color-alert-500);
 }
 
 /* Loading and Error States */
@@ -345,7 +346,7 @@
 }
 
 /* High contrast mode */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .product-spotlight {
     border: var(--shape-border-width-2) solid var(--color-neutral-900);
   }
