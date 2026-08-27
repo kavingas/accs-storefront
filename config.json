@@ -1,8 +1,8 @@
 {
   "public": {
     "default": {
-      "commerce-core-endpoint": "https://na1-stage.api.commerce.adobe.com/BTGLUUrNv1c83gmLfXRp65/graphql",
-      "commerce-endpoint": "https://na1-stage.api.commerce.adobe.com/BTGLUUrNv1c83gmLfXRp65/graphql",
+      "commerce-core-endpoint": "https://na1-stage.api.commerce.adobe.com/AdoS7twoHRTFPMYG8eix9x/graphql",
+      "commerce-endpoint": "https://na1-stage.api.commerce.adobe.com/AdoS7twoHRTFPMYG8eix9x/graphql",
       "headers": {
         "cs": {
           "Magento-Customer-Group": "b6589fc6ab0dc82cf12099d1c2d40ab994e8410c",
